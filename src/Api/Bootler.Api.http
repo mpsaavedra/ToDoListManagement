@@ -1,0 +1,6 @@
+@Bootler.Api_HostAddress = http://localhost:5208
+
+GET {{Bootler.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
