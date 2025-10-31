@@ -17,7 +17,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\BuildingBlocks\Bootler.csproj" />
+    <ProjectReference Include="..\..\src\Contracts\Bootler.Contracts.csproj" />
+    <ProjectReference Include="..\..\src\Domain\Bootler.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Infrastructure\Bootler.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Bootler\" />
   </ItemGroup>
 
 </Project>
