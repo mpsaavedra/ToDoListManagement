@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Requests.Tasks;
 
-public record TaskDelete(long TaskId}
+public record TaskDeleteRequest(long TaskId, bool SoftDelete = true);

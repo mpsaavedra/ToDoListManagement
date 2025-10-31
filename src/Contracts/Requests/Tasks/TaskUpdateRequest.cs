@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Requests.Tasks;
  
-public record TaskEditRequest(long Id, string? Title, string Description?, DateTime? DueTime);
+public record TaskUpdateRequest(long Id, string? Title, string? Description, DateTime? DueTime);

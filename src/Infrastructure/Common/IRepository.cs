@@ -6,9 +6,9 @@ namespace Bootler.Infrastructure.Common;
 
 public interface IRepository<TEntity> where TEntity : class, IEntity
 {
-    Task<long?> CreateAsync(T entity, CancellationToken cancellationToken = default);
-    Task<IQueryable<T>> GetAllAsync(CancellationToken cancellationToken = default);
-    Task<IQueryable<T>> FindAsync(
+    Task<long?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default);
+    Task<IQueryable<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<IQueryable<TEntity>> FindAsync(
         Expression<Func<TEntity, bool>>? predicate = null,
         Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBY = null,
         Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null,

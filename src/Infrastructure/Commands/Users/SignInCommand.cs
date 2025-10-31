@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bootler.Contracts.Responses;
 
 namespace Bootler.Infrastructure.Commands.Users;
 
-public record SignInCommand(SignInRequest SignInRequest)  : IRequest<UserSignInResponse>;
+public record SignInCommand(SignInRequest SignInRequest)  : IRequest<BaseResponse<UserSignInResponse>>;

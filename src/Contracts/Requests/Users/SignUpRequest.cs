@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Requests.Users;
 
-public record SignUpRequest(string UserName, string Passowrd, string Role);
+public record SignUpRequest(string UserName, string Password, string Role);

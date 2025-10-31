@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bootler.Contracts.Responses.Users;
+namespace Bootler.Infrastructure.Validations.Users;
 
-public record SignUpResponse(int Id, string UserName);
+internal class FindUsersValidation
+{
+}

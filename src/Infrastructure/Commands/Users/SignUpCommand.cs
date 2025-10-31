@@ -6,7 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Bootler.Contracts.Responses;
 
 namespace Bootler.Infrastructure.Commands.Users;
 
-public record SignUpCommand(SignUpRequest SignUpRequest): IRequest<SignUpResponse>;
+public record SignUpCommand(SignUpRequest SignUpRequest): IRequest<BaseResponse<SignUpResponse>>;
