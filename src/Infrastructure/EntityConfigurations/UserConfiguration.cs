@@ -19,6 +19,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(x => x.Token).IsRequired(false);
         builder.HasMany(x => x.Tasks).WithOne(x => x.User).HasForeignKey(x => x.UserId);
         builder.HasMany(x => x.AssignedTasks).WithOne(x => x.AsignedBy).HasForeignKey(x => x.AsignedById);
+        builder.HasOne(x => x.Role).WithMany(x => x.Users).HasForeignKey(x => x.RoleId).OnDelete(DeleteBehavior.SetNull);
         builder.HasIndex(x => x.UserName).IsUnique().HasDatabaseName("IX_User_Username_Id");
+        builder.HasQueryFilter(x => x.SoftDeleted == false);
     }
 }

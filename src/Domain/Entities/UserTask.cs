@@ -14,24 +14,28 @@ public class UserTask : Entity
 {
     private long? _asignedById;
     private User? _asignedBy;
+    public long _taskId;
+    private Task _task;
+    private long _userId;
+    private User _user;
     public long UserId 
     { 
-        get; 
-        set; 
+        get => _userId; 
+        set => _userId = value; 
     }
     public User User { 
-        get; 
-        set; 
+        get => _user; 
+        set => _user = value; 
     }
     public long TaskId 
     { 
-        get;
-        set; 
+        get => _taskId;
+        set => _taskId = value; 
     }
     public Task Task 
     { 
-        get;
-        set; 
+        get => _task;
+        set => _task = value; 
     }
     public long? AsignedById
     {

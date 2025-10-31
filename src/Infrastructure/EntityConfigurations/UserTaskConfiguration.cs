@@ -17,5 +17,6 @@ public class UserTaskConfiguration : IEntityTypeConfiguration<UserTask>
         builder.HasOne(x => x.User).WithMany(x => x.Tasks).HasForeignKey(x => x.UserId);
         builder.HasOne(x => x.Task).WithMany(x => x.UserTasks).HasForeignKey(x => x.TaskId);
         builder.HasOne(x => x.AsignedBy).WithMany(x => x.AssignedTasks).HasForeignKey(x => x.AsignedById);
+        builder.HasQueryFilter(x => x.SoftDeleted == false);
     }
 }

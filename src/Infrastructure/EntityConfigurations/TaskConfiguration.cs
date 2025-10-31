@@ -20,5 +20,6 @@ public class TaskConfiguration : IEntityTypeConfiguration<AppTask>
         builder.Property(x => x.StateType).HasMaxLength(20).IsRequired();
         builder.Property(x => x.DueDate).IsRequired(false);
         builder.HasMany(x => x.UserTasks).WithOne(X => X.Task).HasForeignKey(x => x.TaskId).OnDelete(DeleteBehavior.SetNull);
+        builder.HasQueryFilter(x => x.SoftDeleted == false);
     }
 }

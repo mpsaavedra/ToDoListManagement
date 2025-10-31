@@ -14,6 +14,8 @@ public class User : Entity
     private string _userName;
     private string _password;
     private string? _token = null;
+    private long _roleId;
+    private Role _role;
     private ICollection<UserTask> _tasks = new List<UserTask>();
     private ICollection<UserTask> _assignedTasks = new List<UserTask>();
 
@@ -52,5 +54,17 @@ public class User : Entity
     {
         get => _assignedTasks;
         set => _assignedTasks = value;
+    }
+
+    public long RoleId
+    {
+        get => _roleId;
+        set => _roleId = value;
+    }
+
+    public Role Role
+    {
+        get => _role;
+        set => _role = value;
     }
 }
