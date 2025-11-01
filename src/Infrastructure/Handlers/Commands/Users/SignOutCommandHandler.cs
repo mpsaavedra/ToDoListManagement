@@ -34,7 +34,7 @@ public class SignOutCommandHandler : IRequestHandler<SignOutCommand, BaseRespons
         }
         catch (Exception ex)
         {
-            Log.Error("Error while signOut user";
+            Log.Error("Error while signOut user");
             return BaseResponse.Fail<BaseResponse>("Error while signOut user");
         }
     }

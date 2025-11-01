@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Responses.Users;
 
-public record SignUpResponse(int Id, string UserName);
+public record SignUpResponse(long Id, string UserName);
