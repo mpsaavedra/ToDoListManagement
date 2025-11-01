@@ -10,6 +10,7 @@ namespace Bootler.Infrastructure.Behaviours;
 
 /// <summary>
 /// PipelineBehaviour to be executed on each request done in the MediatR pipeline
+/// to check if any validation fails
 /// </summary>
 /// <typeparam name="TRequest"></typeparam>
 /// <typeparam name="TResponse"></typeparam>

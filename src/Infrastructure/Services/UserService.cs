@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Core;
+using Bootler;
 using Bootler.Contracts.DTOs.Users;
 using Bootler.Contracts.Requests.Users;
 using Bootler.Contracts.Responses;
@@ -10,6 +11,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -57,14 +59,18 @@ public class UserService : IUserService
 
 
                 var jwtKey = _config["Jwt:Key"] ?? "ChangeThisSecretForDevOnly_ReplaceInProd";
-                var jwtIssuer = _config["Jwt:Issuer"] ?? "PropertyManagementAPI";
+                var jwtIssuer = _config["Jwt:Issuer"] ?? "BootlerAPI";
                 var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtKey));
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+                var role = user.Role.Name.ToLower();
 
                 var authClaims = new List<Claim>
                     {
+                        new (ClaimTypes.Role, role),
                         new (ClaimTypes.Name, request.UserName!),
                     };
+                
+
                 var token = new JwtSecurityToken(issuer: jwtIssuer, claims: authClaims,
                     expires: DateTime.UtcNow.AddHours(8),
                     signingCredentials: creds);
@@ -90,18 +96,19 @@ public class UserService : IUserService
     public Task<SignUpResponse> SignUpAsync(SignUpRequest request, CancellationToken cancellationToken = default) =>
         _unitOfWork.ExecuteAsync(async () =>
         {
+            Log.Debug($"Creating new user {request.UserName}");
             try
             {
                 var repo = _unitOfWork.Repository<User>();
-                var users = await repo!.FindAsync(predicate: x => x.UserName == request.UserName);
+                Log.Debug("Maping user request objetc to app user");
+                var data = _mapper.Map<User>(request);
+                var users = await repo!.FindAsync(predicate: x => x.UserName == data.UserName);
                 if (users == null)
-                    throw new Exception("");
+                    throw new Exception($"User {data.UserName} already exists");
 
-                var user = await users.FirstOrDefaultAsync(x => x.UserName == request.UserName);
-                if (user == null)
-                    throw new Exception("SignIn user could not not be null or empty");
+                var id = await repo!.CreateAsync(data, cancellationToken);
 
-                return new SignUpResponse(user.Id, user.UserName);
+                return new SignUpResponse(data.Id, data.UserName);
             }
             catch (Exception ex)
             {
