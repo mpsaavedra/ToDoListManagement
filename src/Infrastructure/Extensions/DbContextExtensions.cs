@@ -104,13 +104,13 @@ public static class DbContextExtensions
         verifySucceeded ??= new Task<bool>(() => true);
         var executionStrategy = ctx.Database.CreateExecutionStrategy();
         AppUser user;
-        if (!ctx.Users.Any() || ctx.CurrentUserId == null || ctx.CurrentUserId <= 0)
-        {
-            await CreateAdminUser(ctx);
-            user = await ctx.Users.FirstAsync(x => x.UserName == "admin");
-        }
-        else
-            user = await ctx.Users.FirstAsync(x => x.Id == ctx.CurrentUserId);
+        //if (!ctx.Users.Any() || ctx.CurrentUserId == null || ctx.CurrentUserId <= 0)
+        //{
+        //    await CreateAdminUser(ctx);
+        //    user = await ctx.Users.FirstAsync(x => x.UserName == "admin");
+        //}
+        //else
+        //    user = await ctx.Users.FirstAsync(x => x.Id == ctx.CurrentUserId);
         //var user = await ctx.Users.FirstAsync(x => x.UserName == currentUserName);
         if (ctx.Database.ProviderName == null || ctx.Database.ProviderName.Contains("InMemory"))
         {

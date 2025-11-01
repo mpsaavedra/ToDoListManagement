@@ -6,6 +6,7 @@ using Bootler.Infrastructure.Services;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,36 +22,45 @@ using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
 
 namespace Bootler.Infrastructure.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection AddBootlerServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddBootlerServices(this IServiceCollection services, 
+        IConfiguration configuration)
     {
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File($"logs/Bootlee.Api-{DateTime.UtcNow.ToString("yy-MM-d")}.txt", rollingInterval: RollingInterval.Hour)
+            .CreateLogger();
+
         services.AddCors();
         services.AddOptions();
         services.AddAutoMapper(typeof(AutoMapping));
         services.AddValidatorsFromAssembly(typeof(AppDbContext).Assembly);
+
+        services.AddHttpContextAccessor();
+        services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+
         services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(typeof(AppDbContext).Assembly);
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         });
         
-        services.AddHttpContextAccessor();
-        services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
         services
                 .AddPooledDbContextFactory<AppDbContext>(cfg =>
                 cfg
                     .EnableDetailedErrors(true)
                     .EnableSensitiveDataLogging(true)
-                    .UseSqlServer(configuration.GetConnectionString("DefaultConnectionString"),
+                    .UseNpgsql(configuration.GetConnectionString("DefaultConnectionString"),
                     cfg =>
                     {
-                        cfg.MigrationsAssembly(typeof(AppDbContext).Assembly);
+                        cfg.MigrationsAssembly("Bootler.Api");
                         cfg.EnableRetryOnFailure(
                             10,
                             TimeSpan.FromSeconds(3, 10, 0),
@@ -61,7 +72,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IDomainEventDispatcher, DomainEventDispatcher>();
-        services.AddScoped<ICurrentUserService, CurrentUserService>();
         services.AddScoped<IUserService, UserService>();
 
         services.AddAuthenticationServices(configuration);

@@ -32,6 +32,4 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
 
-await app.SeedDatabase();
-
-await app.RunAsync();
+app.Run();

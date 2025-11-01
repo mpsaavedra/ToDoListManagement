@@ -35,8 +35,7 @@ public static class EntityExtensions
         builder.Property(x => x.CreatedBy).IsRequired(false);
         builder.Property(x => x.LastUpdatedAt).IsRequired(false);
         builder.Property(x => x.LastUpdatedBy).IsRequired(false);
-        builder.HasIndex(x => x.Id).IsUnique().HasDatabaseName($"IX_{nameof(T)}_Id");
-        builder.HasKey("Id", "RowVersion");
+        builder.HasKey(x => x.Id);
         return builder;
     }
 }

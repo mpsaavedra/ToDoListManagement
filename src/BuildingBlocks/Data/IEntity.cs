@@ -32,7 +32,7 @@ public interface IEntity
     /// <summary>
     /// id of user that creates the entity
     /// </summary>
-    long CreatedBy { get; set; }
+    long? CreatedBy { get; set; }
     /// <summary>
     /// Creation date
     /// </summary>

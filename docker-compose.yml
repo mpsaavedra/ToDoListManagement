@@ -1,8 +1,18 @@
+version: "3.9"
+
 services:
-  db:
-    image: mcr.microsoft.com/mssql/server
-    environment:
-      SA_PASSWORD: "todo_db"
-      ACCEPT_EULA: "Y"
+  postgres:
+    image: postgres:15-alpine
+    container_name: todo_postgres
+    restart: unless-stopped
     ports:
-      - "1433:1433"
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: todo_user
+      POSTGRES_PASSWORD: todo_pwd
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

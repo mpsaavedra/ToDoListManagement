@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure.Core;
 using Bootler;
 using Bootler.Contracts.DTOs.Users;
 using Bootler.Contracts.Requests.Users;

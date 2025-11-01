@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Requests.Users;
 
-public record FindUsersRequest(IEnumerable<string> Filters, string? OrderBy = null, int PageIndex = 0, int PageSize = 50);
+public record FindUsersRequest(IEnumerable<string>? Filters, string? OrderBy = null, int PageIndex = 0, int PageSize = 50);

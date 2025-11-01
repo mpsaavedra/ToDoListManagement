@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using c;
 using AppRole = Bootler.Domain.Entities.Role;
 using AppTask = Bootler.Domain.Entities.Task;
 using AppUser = Bootler.Domain.Entities.User;
