@@ -1,5 +1,6 @@
 ﻿using Bootler.Data;
 using Bootler.Infrastructure.Services;
+using Bootler.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using System;
@@ -28,15 +29,23 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
         _currentUser = currentUser;
     }
 
-    public Task<bool> AnyASync(Expression<Func<TEntity, bool>>? predicate = null,
+    public async Task<bool> AnyASync(Expression<Func<TEntity, bool>>? predicate = null,
         CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var ctx = await _factory.CreateDbContextAsync(cancellationToken);
+        if (predicate != null) 
+            return await ctx.Set<TEntity>().AnyAsync(predicate);
+        return await ctx.Set<TEntity>().AnyAsync();
     }
 
-    public Task<long?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
+    public async Task<long?> CreateAsync(TEntity entity, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var ctx = await _factory.CreateDbContextAsync(cancellationToken);
+        var id = await ctx.Set<TEntity>().AddAsync(entity);
+        var saved = await ctx.SaveEntitiesChangesAsync(0, cancellationToken);
+        if (id.Entity.Id <= 0)
+            throw new ApplicationException($"Could not create new entity {nameof(TEntity)}");
+        return id.Entity.Id;
     }
 
     public Task<bool> DeleteAsync(long id, bool softDelete = true, CancellationToken cancellationToken = default)

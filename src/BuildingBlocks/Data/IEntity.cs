@@ -32,7 +32,7 @@ public interface IEntity
     /// <summary>
     /// id of user that creates the entity
     /// </summary>
-    string CreatedBy { get; set; }
+    long CreatedBy { get; set; }
     /// <summary>
     /// Creation date
     /// </summary>
@@ -44,7 +44,7 @@ public interface IEntity
     /// <summary>
     /// 
     /// </summary>
-    DateTime? LastUpdatedBy { get; set; }
+    long? LastUpdatedBy { get; set; }
 
     /// <summary>
     /// Returns a <see cref="IReadOnlyCollection{IDomainEvent}"/> collection

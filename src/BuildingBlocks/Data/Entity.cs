@@ -17,15 +17,15 @@ public abstract class Entity : IEntity, IEquatable<Entity>
     private bool _softDeleted = false;
     private string? _rowVersion = Guid.NewGuid().ToString();
     private readonly List<IDomainEvent> _domainEvents = new();
-    private string _createdBy;
+    private long _createdBy;
     private DateTime _createdAt;
     private DateTime? _lastUpdatedAt;
-    private DateTime? _lastUpdatedBy;
+    private long? _lastUpdatedBy;
 
     /// <summary>
     /// <inheritdoc cref="IAuditableEntity.CreatedBy"/>
     /// </summary>
-    public string CreatedBy
+    public long CreatedBy
     {
         get => _createdBy;
         set => _createdBy = value;
@@ -52,7 +52,7 @@ public abstract class Entity : IEntity, IEquatable<Entity>
     /// <summary>
     /// <inheritdoc cref="IAuditableEntity.LastUpdatedBy"/>
     /// </summary>
-    public DateTime? LastUpdatedBy
+    public long? LastUpdatedBy
     {
         get => _lastUpdatedBy;
         set => _lastUpdatedAt = value;
