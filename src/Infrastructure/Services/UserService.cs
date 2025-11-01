@@ -8,15 +8,30 @@ using System.Threading.Tasks;
 
 namespace Bootler.Infrastructure.Services;
 
-public interface IUserService
+public class UserService : IUserService
 {
-    Task<SignInResponse> SignInAsync(SignInRequest userSignInRequest);
-    Task<bool> SignOutAsync();
-    Task<SignUpResponse> SignUpAsync(SignUpRequest userSignInRequest);
-    Task<bool> VerifyPasswordAsync(string UserName, string Password);
-    Task<bool> IsAdminAsync(string userName);
-}
+    public Task<bool> IsAdminAsync(string userName)
+    {
+        throw new NotImplementedException();
+    }
 
-public class UserService
-{
+    public Task<SignInResponse> SignInAsync(SignInRequest userSignInRequest)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> SignOutAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<SignUpResponse> SignUpAsync(SignUpRequest userSignInRequest)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> VerifyPasswordAsync(string UserName, string Password)
+    {
+        throw new NotImplementedException();
+    }
 }

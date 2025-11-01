@@ -62,6 +62,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddTransient<IDomainEventDispatcher, DomainEventDispatcher>();
         services.AddScoped<ICurrentUserService, CurrentUserService>();
+        services.AddScoped<IUserService, UserService>();
 
         services.AddAuthenticationServices(configuration);
 

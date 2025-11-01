@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
 
     public AppDbContext() : base() { }
 
+    public DbSet<Role> Roles { get; set; }
     public DbSet<AppTask> Tasks { get; set; }
     public DbSet<AppUser> Users {  get; set; }
     public DbSet<UserTask> UserTasks { get; set; }
