@@ -5,4 +5,4 @@ using MediatR;
 
 namespace Bootler.Infrastructure.Commands.Tasks;
 
-public record TaskCreateCommand(TaskCreateRequest request) : IRequest<BaseResponse<TaskCreateResponse>>;
+public record TaskCreateCommand(TaskCreateRequest Input) : IRequest<BaseResponse<TaskCreateResponse>>;

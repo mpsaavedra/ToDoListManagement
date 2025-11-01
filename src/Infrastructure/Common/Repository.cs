@@ -39,7 +39,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
         throw new NotImplementedException();
     }
 
-    public Task<bool> DeleteAsync(int id, bool softDelete = true, CancellationToken cancellationToken = default)
+    public Task<bool> DeleteAsync(long id, bool softDelete = true, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
@@ -70,7 +70,7 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, I
         throw new NotImplementedException();
     }
 
-    public Task<TEntity?> UpdateAsync(int id, TEntity entity, CancellationToken cancellationToken = default)
+    public Task<TEntity?> UpdateAsync(long id, TEntity entity, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

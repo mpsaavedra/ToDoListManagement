@@ -1,10 +1,14 @@
-﻿using System.Net;
-using System.Reflection.Metadata.Ecma335;
+﻿using Bootler.Contracts.DTOs.Users;
 using Bootler.Contracts.Requests.Users;
+using Bootler.Contracts.Responses;
 using Bootler.Contracts.Responses.Users;
 using Bootler.Infrastructure.Commands.Users;
+using Bootler.Infrastructure.Queries.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Net.Mime;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Bootler.Api.Controllers;
 
@@ -20,6 +24,9 @@ public class UserController : ApiControllerBase
     }
 
     [HttpPost("SignIn")]
+    [Consumes("application/json")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(BaseResponse<SignInResponse>), StatusCodes.Status200OK)]
     public async Task<ActionResult> SignInAsync([FromBody] SignInRequest request)
     {
         var result = await _mediator.Send(new SignInCommand(request));
@@ -33,6 +40,9 @@ public class UserController : ApiControllerBase
     }
 
     [HttpPost("SignOut")]
+    [Consumes("application/json")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(BaseResponse), StatusCodes.Status200OK)]
     public async Task<IActionResult> SignOutAsync()
     {
         var result = await _mediator.Send(new SignOutCommand());
@@ -47,6 +57,9 @@ public class UserController : ApiControllerBase
     }
 
     [HttpPost("SignUp")]
+    [Consumes("application/json")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(BaseResponse<SignUpResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> SignUpAsync([FromBody] SignUpRequest request)
     {
         var result = await _mediator.Send(new SignUpCommand(request));
@@ -54,6 +67,38 @@ public class UserController : ApiControllerBase
             result.Success && result.Data.Id > 0
                 ? $"User  {request.UserName} sign in success!"
                 : $"Couldn't sign user {request.UserName}",
+            !result.Success
+                ? HttpStatusCode.OK
+                : HttpStatusCode.InternalServerError);
+    }
+
+    [HttpGet("GetAllUsers")]
+    [Consumes("application/json")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(BaseResponse<PaginatedList<UserDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAllUsersAsync([FromQuery] GetAllUsersRequest request)
+    {
+        var result = await _mediator.Send(new GetAllUsersQuery(request));
+        return ToWithStatusCode(result,
+            result.Success
+                ? $"Retrieving  {result.Data!.Users.TotalCount} sign in success!"
+                : $"Couldn't retrieving users",
+            !result.Success
+                ? HttpStatusCode.OK
+                : HttpStatusCode.InternalServerError);
+    }
+
+    [HttpGet("FindUsers")]
+    [Consumes("application/json")]
+    [Produces(MediaTypeNames.Application.Json)]
+    [ProducesResponseType(typeof(BaseResponse<PaginatedList<UserDto>>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> FindUsersAsync([FromQuery] FindUsersRequest request)
+    {
+        var result = await _mediator.Send(new FindUsersQuery(request));
+        return ToWithStatusCode(result,
+            result.Success
+                ? $"Retrieving {result.Data.Users.TotalCount} users!"
+                : $"Couldn't retrieving users",
             !result.Success
                 ? HttpStatusCode.OK
                 : HttpStatusCode.InternalServerError);

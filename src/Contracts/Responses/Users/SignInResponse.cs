@@ -7,4 +7,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Responses.Users;
 
-public record UserSignInResponse(string? Token = null, UserDto? User = null);
+public record SignInResponse(string? Token = null, UserDto? User = null);

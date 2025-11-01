@@ -18,7 +18,7 @@ public partial class Task : Entity
     private DateTime? _dueDate;
     private ICollection<UserTask> _userTasks = new List<UserTask>();
 
-    protected Task() { }
+    public Task() { }
 
     public Task(string title, string description, string stateType, DateTime? dueDate = null)
     {
@@ -34,12 +34,12 @@ public partial class Task : Entity
     public string Title 
     { 
         get => _title; 
-        private set => _title = value; 
+        set => _title = value; 
     }
     public string Description 
     { 
         get => _description; 
-        private set => _description = value; 
+        set => _description = value; 
     }
     public string StateType 
     { 

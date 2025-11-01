@@ -12,12 +12,23 @@ namespace Bootler.Domain.Entities;
 /// </summary>
 public class UserTask : Entity
 {
-    private long? _asignedById;
-    private User? _asignedBy;
+    private long? _assignedById;
+    private User? _assignedBy;
     public long _taskId;
     private Task _task;
     private long _userId;
     private User _user;
+
+    public UserTask()
+    {
+    }
+    public UserTask(long userId, long taskId, long? assignedBy = null)
+    {
+        UserId = userId;
+        TaskId = taskId;
+        AssignedBy = assignedBy;
+    }
+
     public long UserId 
     { 
         get => _userId; 
@@ -32,6 +43,7 @@ public class UserTask : Entity
         get => _taskId;
         set => _taskId = value; 
     }
+    public long? AssignedBy { get; }
     public Task Task 
     { 
         get => _task;
@@ -39,12 +51,12 @@ public class UserTask : Entity
     }
     public long? AsignedById
     {
-        get => _asignedById;
-        set => _asignedById = value;
+        get => _assignedById;
+        set => _assignedById = value;
     }
     public User? AsignedBy
     {
-        get => _asignedBy;
-        set => _asignedBy = value;
+        get => _assignedBy;
+        set => _assignedBy = value;
     }
 }

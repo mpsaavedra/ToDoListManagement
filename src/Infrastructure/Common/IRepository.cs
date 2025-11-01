@@ -17,8 +17,8 @@ public interface IRepository<TEntity> where TEntity : class, IEntity
     Task<TEntity?> FirstOrDefaultAsync(
         Expression<Func<TEntity, bool>>? predicate = null, bool includeSoftDeleted = false,
         bool disableTracking = true, CancellationToken cancellationToken = default);
-    Task<TEntity?> UpdateAsync(int id, TEntity entity, CancellationToken cancellationToken = default);
-    Task<bool> DeleteAsync(int id, bool softDelete = true, CancellationToken cancellationToken = default);
+    Task<TEntity?> UpdateAsync(long id, TEntity entity, CancellationToken cancellationToken = default);
+    Task<bool> DeleteAsync(long id, bool softDelete = true, CancellationToken cancellationToken = default);
     Task<bool> DeleteAsync(Expression<Func<TEntity, bool>>? predicate = null, bool softDelete = true,
             CancellationToken cancellationToken = default);
     Task<bool> AnyASync(Expression<Func<TEntity, bool>>? predicate = null,

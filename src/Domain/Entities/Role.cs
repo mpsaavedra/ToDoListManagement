@@ -12,6 +12,16 @@ public class Role : Entity
     private string _name;
     private ICollection<User> _users = new List<User>();
 
+    public Role()
+    {
+    }
+
+    public Role(string name, ICollection<User>? users = null)
+    {
+        users ??= new List<User>();
+        Name = name;
+        Users = users;
+    }
     public string Name 
     { 
         get => _name; 

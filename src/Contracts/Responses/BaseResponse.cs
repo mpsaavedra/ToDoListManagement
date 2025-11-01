@@ -16,6 +16,30 @@ public class BaseResponse<T> : BaseResponse
 
 public class BaseResponse
 {
+    public static BaseResponse Succeed(string? msg = "") =>
+        new BaseResponse
+        {
+            Message = msg ?? ""
+        };
+
+    /// <summary>
+    /// return a <see cref="BaseResponse"/> indicating a failed operation"/>
+    /// </summary>
+    /// <param name="message"></param>
+    /// <param name="statusCode"></param>
+    /// <returns></returns>
+    public static BaseResponse Failed(string message, HttpStatusCode statusCode = HttpStatusCode.InternalServerError)
+    {
+        var result = new BaseResponse
+        {
+            Success = false,
+            Message = message,
+            StatusCode = statusCode
+        };
+        result.Errors.Add(message);
+        return result;
+    }
+
     /// <summary>
     /// creates a fail response with some message
     /// </summary>

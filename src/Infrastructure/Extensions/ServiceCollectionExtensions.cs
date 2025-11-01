@@ -65,6 +65,11 @@ public static class ServiceCollectionExtensions
 
         services.AddAuthenticationServices(configuration);
 
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(DomainEventDispatcher).Assembly);
+        });
+
         return services;
     }
 

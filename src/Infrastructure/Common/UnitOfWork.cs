@@ -11,7 +11,8 @@ public class UnitOfWork : IUnitOfWork
 {
     public IDbContextFactory<AppDbContext> DbContextFactory => throw new NotImplementedException();
 
-    public Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> operation, Task<bool>? verifySucceeded = null, CancellationToken cancellationToken = default)
+    public Task<TResult> ExecuteAsync<TResult>(Func<Task<TResult>> operation, Task<bool>? verifySucceeded = null, 
+        CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

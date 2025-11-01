@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Bootler.Infrastructure.Commands.Tasks;
 
-public record TaskUpdateCommand(TaskUpdateRequest request) : IRequest<BaseResponse>;
+public record TaskUpdateCommand(TaskUpdateRequest Input) : IRequest<BaseResponse>;

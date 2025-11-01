@@ -19,7 +19,7 @@ public class User : Entity
     private ICollection<UserTask> _tasks = new List<UserTask>();
     private ICollection<UserTask> _assignedTasks = new List<UserTask>();
 
-    protected User() { }
+    public User() { }
     public User(string userName, string password)
     {
         UserName = userName;

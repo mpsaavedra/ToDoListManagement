@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Bootler.Infrastructure.Commands.Tasks;
 
-public record TaskDeleteCommand(TaskDeleteRequest Input) : IRequest<BaseResponse>;
+public record TaskAssignToUserCommand(TaskAssignToUserRequest Input) : IRequest<BaseResponse>;

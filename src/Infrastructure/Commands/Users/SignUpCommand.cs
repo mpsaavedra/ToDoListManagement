@@ -10,4 +10,4 @@ using Bootler.Contracts.Responses;
 
 namespace Bootler.Infrastructure.Commands.Users;
 
-public record SignUpCommand(SignUpRequest SignUpRequest): IRequest<BaseResponse<SignUpResponse>>;
+public record SignUpCommand(SignUpRequest Input): IRequest<BaseResponse<SignUpResponse>>;

@@ -10,11 +10,11 @@ namespace Bootler.Infrastructure.Services;
 
 public interface IUserService
 {
-    Task<UserSignInResponse> SignIn(SignInRequest userSignInRequest);
-    Task<bool> SignOut();
-    Task<SignUpResponse> SignUp(SignInRequest userSignInRequest);
-    Task<bool> VerifyPassword(string UserName, string Password);
-    Task<bool> IsAdmin(string userName);
+    Task<SignInResponse> SignInAsync(SignInRequest userSignInRequest);
+    Task<bool> SignOutAsync();
+    Task<SignUpResponse> SignUpAsync(SignUpRequest userSignInRequest);
+    Task<bool> VerifyPasswordAsync(string UserName, string Password);
+    Task<bool> IsAdminAsync(string userName);
 }
 
 public class UserService

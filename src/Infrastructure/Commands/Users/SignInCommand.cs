@@ -10,4 +10,4 @@ using Bootler.Contracts.Responses;
 
 namespace Bootler.Infrastructure.Commands.Users;
 
-public record SignInCommand(SignInRequest SignInRequest)  : IRequest<BaseResponse<UserSignInResponse>>;
+public record SignInCommand(SignInRequest Input)  : IRequest<BaseResponse<SignInResponse>>;
