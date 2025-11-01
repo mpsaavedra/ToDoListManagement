@@ -24,14 +24,14 @@ public class TaskDeleteCommandHandler : IRequestHandler<TaskDeleteCommand, BaseR
         {
             try
             {
-                Log.Debug($"Deleting Task with ID: {request.Request.TaskId}");
+                Log.Debug($"Deleting Task with ID: {request.Input.TaskId}");
                 var taskRepo = unitOfWork.Repository<Domain.Entities.Task>();
-                var task = await taskRepo!.FirstOrDefaultAsync(x => x.Id == request.Request.TaskId, cancellationToken: cancellationToken);
+                var task = await taskRepo!.FirstOrDefaultAsync(x => x.Id == request.Input.TaskId, cancellationToken: cancellationToken);
                 if (task == null)
                 {
                     return BaseResponse.Failed("Task not found");
                 }
-                await taskRepo.DeleteAsync(task.Id, softDelete: request.Request.SoftDelete, cancellationToken: cancellationToken);
+                await taskRepo.DeleteAsync(task.Id, softDelete: request.Input.SoftDelete, cancellationToken: cancellationToken);
                 Log.Debug("Task deleted successfully");
                 return BaseResponse.Succeed("Task deleted successfully");
             }

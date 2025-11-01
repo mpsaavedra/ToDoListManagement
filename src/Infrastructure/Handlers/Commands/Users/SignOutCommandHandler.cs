@@ -1,4 +1,5 @@
-﻿using Bootler.Contracts.Responses;
+﻿using Bootler.Contracts.Requests.Users;
+using Bootler.Contracts.Responses;
 using Bootler.Contracts.Responses.Users;
 using Bootler.Infrastructure.Commands.Users;
 using Bootler.Infrastructure.Services;
@@ -20,9 +21,9 @@ public class SignOutCommandHandler : IRequestHandler<SignOutCommand, BaseRespons
     {
         this._userService = userService;
     }
+
     public async Task<BaseResponse> Handle(SignOutCommand request, CancellationToken cancellationToken)
     {
-
         try
         {
             Log.Debug($"SignOut current user");
@@ -33,8 +34,8 @@ public class SignOutCommandHandler : IRequestHandler<SignOutCommand, BaseRespons
         }
         catch (Exception ex)
         {
-            Log.Error("Error while signing in user {UserName}", request.Input.UserName);
-            return BaseResponse.Fail<BaseResponse<SignInResponse>>("Error while signing in user {UserName}");
+            Log.Error("Error while signOut user";
+            return BaseResponse.Fail<BaseResponse>("Error while signOut user");
         }
     }
 }

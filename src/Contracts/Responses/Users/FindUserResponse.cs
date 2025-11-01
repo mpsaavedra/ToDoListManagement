@@ -5,6 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Bootler.Contracts.Responses;
+namespace Bootler.Contracts.Responses.Users;
 
 public record FindUserResponse(UserDetailDto? User);
