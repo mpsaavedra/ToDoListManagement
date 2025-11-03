@@ -1,0 +1,4 @@
+2025-11-02 21:30:06.036 -05:00 [ERR] An error occurs while retrieving Tasks
+2025-11-02 21:57:35.456 -05:00 [ERR] An error occurs while retrieving Users: 42P01: relation "AspNetUsers" does not exist
+
+POSITION: 28
