@@ -16,7 +16,7 @@ public interface IRoleRepository: IRepository<Role>
 
 public class RoleRepository : Repository<Role>, IRoleRepository
 {
-    public RoleRepository(IDbContextFactory<AppDbContext> factory, ICurrentUserService currentUser) : base(factory, currentUser)
+    public RoleRepository(AppDbContext ctx, ICurrentUserService currentUser) : base(ctx, currentUser)
     {
     }
 }

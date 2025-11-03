@@ -53,24 +53,7 @@ public static class ServiceCollectionExtensions
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
         });
         
-
-        services
-                .AddPooledDbContextFactory<AppDbContext>(cfg =>
-                cfg
-                    .EnableDetailedErrors(true)
-                    .EnableSensitiveDataLogging(true)
-                    .UseNpgsql(configuration.GetConnectionString("DefaultConnectionString"),
-                    cfg =>
-                    {
-                        cfg.MigrationsAssembly("Bootler.Api");
-                        cfg.EnableRetryOnFailure(
-                            10,
-                            TimeSpan.FromSeconds(3, 10, 0),
-                            null);
-                    })
-            );
-        
-        services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+        Action<DbContextOptionsBuilder> configureDbContext = options =>
         {
             options.EnableDetailedErrors(true)
                 .EnableSensitiveDataLogging(true)
@@ -79,11 +62,13 @@ public static class ServiceCollectionExtensions
                     {
                         cfg.MigrationsAssembly("Bootler.Api");
                         cfg.EnableRetryOnFailure(
-                            10,
-                            TimeSpan.FromSeconds(3, 10, 0),
-                            null);
+                            maxRetryCount: 10, 
+                            maxRetryDelay: TimeSpan.FromSeconds(30), 
+                            errorCodesToAdd: null);
                     });
-        });
+        };
+        // services.AddPooledDbContextFactory<AppDbContext>(configureDbContext);
+        services.AddDbContext<AppDbContext>(configureDbContext, ServiceLifetime.Scoped);
         
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
@@ -176,6 +161,11 @@ public static class ServiceCollectionExtensions
 
     public static WebApplication UseBootlerServices(this WebApplication app)
     {
+        app.UseCors(cfg =>
+            cfg
+                .AllowAnyHeader()
+                .AllowAnyOrigin()
+                .AllowAnyMethod());
         return app;
     }
 }

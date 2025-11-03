@@ -13,7 +13,7 @@ namespace Bootler.Domain.Entities;
 
 public class User : IdentityUser<long> , IEntity, IEquatable<User>
 {
-    private string _userName;
+    //private string _userName;
     private string _password;
     private string? _token = null;
     private long _roleId;
@@ -40,11 +40,11 @@ public class User : IdentityUser<long> , IEntity, IEquatable<User>
     public static User Create(string userName, string Password) =>
         new (userName, Password, 2);
 
-    public string UserName 
-    { 
-        get => _userName; 
-        set => _userName = value; 
-    }    
+    //public string UserName 
+    //{ 
+    //    get => _userName; 
+    //    set => _userName = value; 
+    //}    
     public string Password 
     { 
         get => _password; 

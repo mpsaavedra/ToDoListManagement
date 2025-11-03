@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Bootler.Infrastructure.Extensions;
 using AppRole = Bootler.Domain.Entities.Role;
 using AppTask = Bootler.Domain.Entities.Task;
 using AppUser = Bootler.Domain.Entities.User;
@@ -16,6 +17,7 @@ public class UnitOfWork : IUnitOfWork
 {
     private readonly IServiceProvider _provider;
     private readonly ICurrentUserService _currentUser;
+    private readonly AppDbContext _ctx;
     public const int SYSTEM_USER_ID = 1;
 
     protected bool disposed = false;
@@ -23,12 +25,12 @@ public class UnitOfWork : IUnitOfWork
 
     public IDbContextFactory<AppDbContext> DbContextFactory { get; }
 
-    public UnitOfWork(IDbContextFactory<AppDbContext> dbContextFactory, IServiceProvider serviceProvider,
+    public UnitOfWork(AppDbContext ctx, IServiceProvider serviceProvider,
         ICurrentUserService currentUserService)
     {
-        DbContextFactory = dbContextFactory;
         _provider = serviceProvider;
         _currentUser = currentUserService;
+        _ctx = ctx;
     }
 
     private async Task<long> CreateAdminUser(AppDbContext ctx)
@@ -51,50 +53,51 @@ public class UnitOfWork : IUnitOfWork
         CancellationToken cancellationToken = default)
     {
         verifySucceeded ??= new Task<bool>(() => true);
-        var ctx = await DbContextFactory.CreateDbContextAsync();
-        var executionStrategy = ctx.Database.CreateExecutionStrategy();
+        // await using var ctx = await DbContextFactory.CreateDbContextAsync(cancellationToken);
+        var executionStrategy = _ctx.Database.CreateExecutionStrategy();
         AppUser user;
-        if (!ctx.Users.Any() || _currentUser.GetUserId() == null || _currentUser.GetUserId() <= 0)
+        if (!_ctx.Users.Any() || _currentUser.GetUserId() == null || _currentUser.GetUserId() <= 0)
         {
-            await CreateAdminUser(ctx);
-            user = await ctx.Users.FirstAsync(x => x.UserName == "admin");
+            await CreateAdminUser(_ctx);
+            user = await _ctx.Users.FirstAsync(x => x.UserName == "admin", cancellationToken);
         }
         else
-            user = await ctx.Users.FirstAsync(x => x.Id == _currentUser.GetUserId());
+            user = await _ctx.Users.FirstAsync(x => x.Id == _currentUser.GetUserId(), cancellationToken);
         //var user = await ctx.Users.FirstAsync(x => x.UserName == currentUserName);
-        if (ctx.Database.ProviderName == null || ctx.Database.ProviderName.Contains("InMemory"))
+        if (_ctx.Database.ProviderName == null || _ctx.Database.ProviderName.Contains("InMemory"))
         {
             // InMemory does no support transactions
             // this should be in tests only
             return await executionStrategy.ExecuteAsync(async () =>
             {
                 var result = operation.Invoke();
-                //if (ctx is AppDbContext context)
-                //    await context.SaveEntitiesChangesAsync(user != null ? user.Id : 0, cancellationToken);
-                //else
-                await ctx.SaveChangesAsync(cancellationToken);
+                if (_ctx is AppDbContext context)
+                    await context.SaveEntitiesChangesAsync(user != null ? user.Id : 0, cancellationToken);
+                else
+                    await _ctx.SaveChangesAsync(cancellationToken);
                 return await result;
             });
         }
 
         return await executionStrategy.ExecuteAsync(async ct =>
         {
-            await using var transaction = await ctx.Database.BeginTransactionAsync(cancellationToken);
+            await using var transaction = await _ctx.Database.BeginTransactionAsync(ct);
             try
             {
                 var result = await operation.Invoke();
 
-                //if (ctx is AppDbContext context)
-                //    await context.SaveEntitiesChangesAsync(user.Id, cancellationToken);
-                //else
-                await ctx.SaveChangesAsync(cancellationToken);
+                // ReSharper disable once ConvertTypeCheckPatternToNullCheck
+                if (_ctx is AppDbContext context)
+                    await context.SaveEntitiesChangesAsync(user.Id, ct);
+                else
+                    await _ctx.SaveChangesAsync(ct);
 
-                await transaction.CommitAsync(cancellationToken);
+                await transaction.CommitAsync(ct);
                 return result;
             }
             catch
             {
-                await transaction.RollbackAsync(cancellationToken);
+                await transaction.RollbackAsync(ct);
                 throw;
             }
         }, cancellationToken);
@@ -103,18 +106,18 @@ public class UnitOfWork : IUnitOfWork
     public System.Threading.Tasks.Task ExecuteAsync(Action operation, Func<bool>? verifySucceeded = null, CancellationToken cancellationToken = default) =>
             System.Threading.Tasks.Task.Run(async () =>
             {
-                var ctx = await DbContextFactory.CreateDbContextAsync();
+                // await using var ctx = await DbContextFactory.CreateDbContextAsync();
                 verifySucceeded ??= (() => false);
-                var executionStrategy = ctx.Database.CreateExecutionStrategy();
+                var executionStrategy = _ctx.Database.CreateExecutionStrategy();
                 User user;
-                if (!ctx.Users.Any() || _currentUser.GetUserId() == null || _currentUser.GetUserId() < 0)
+                if (!_ctx.Users.Any() || _currentUser.GetUserId() == null || _currentUser.GetUserId() < 0)
                 {
-                    await CreateAdminUser(ctx);
-                    user = await ctx.Users.FirstAsync(x => x.UserName == "admin");
+                    await CreateAdminUser(_ctx);
+                    user = await _ctx.Users.FirstAsync(x => x.UserName == "admin");
                 }
                 else
-                    user = await ctx.Users.FirstAsync(x => x.Id == _currentUser.GetUserId());
-                if (ctx.Database.ProviderName == null || ctx.Database.ProviderName.Contains("InMemory"))
+                    user = await _ctx.Users.FirstAsync(x => x.Id == _currentUser.GetUserId());
+                if (_ctx.Database.ProviderName == null || _ctx.Database.ProviderName.Contains("InMemory"))
                 {
                     // InMemory does no support transactions
                     // this should be in tests only
@@ -124,7 +127,7 @@ public class UnitOfWork : IUnitOfWork
                         //if (ctx is AppDbContext context)
                         //    await context.SaveEntitiesChangesAsync(user.Id, cancellationToken);
                         //else
-                        await ctx.SaveChangesAsync(cancellationToken);
+                        await _ctx.SaveChangesAsync(cancellationToken);
                     });
                 }
                 else
@@ -135,7 +138,7 @@ public class UnitOfWork : IUnitOfWork
                         //if (ctx is AppDbContext context)
                         //    await context.SaveEntitiesChangesAsync(user.Id, cancellationToken);
                         //else
-                        await ctx.SaveChangesAsync(cancellationToken);
+                        await _ctx.SaveChangesAsync(cancellationToken);
                     }, verifySucceeded);
                 }
             }, cancellationToken);
@@ -155,7 +158,7 @@ public class UnitOfWork : IUnitOfWork
         if (!repositories.ContainsKey(type))
         {
             // save to our local cache
-            repositories[type] = new Repository<TEntity>((IDbContextFactory<AppDbContext>)DbContextFactory, _currentUser);
+            repositories[type] = new Repository<TEntity>(_ctx, _currentUser);
         }
 
 

@@ -9,4 +9,11 @@ using System.Threading.Tasks;
 namespace Bootler.Contracts.DTOs.Users;
 
 
-public record UserDto(long Id, string UserName, RoleSingleDto Role); //, ICollection<UserTaskDto> Tasks, ICollection<UserTaskDto> AssignedTasks);
+public record UserDto
+{
+    public long Id { get; set; }
+    public string UserName { get; set; }
+    public RoleSingleDto Role { get; set; }
+    public ICollection<UserTaskDto> Tasks { get; set; }
+    public ICollection<UserTaskDto> AssignedTasks { get; set; }
+}

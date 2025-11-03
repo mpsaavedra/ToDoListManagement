@@ -1,0 +1,2 @@
+2025-11-03 09:05:52.547 -05:00 [DBG] Signing in user admin
+2025-11-03 09:06:06.451 -05:00 [ERR] Error while signing in user admin

@@ -17,7 +17,7 @@ public interface ITaskRepository : IRepository<AppTask>
 
 public class TaskRepository : Repository<AppTask>, ITaskRepository
 {
-    public TaskRepository(IDbContextFactory<AppDbContext> factory, ICurrentUserService currentUser) : base(factory, currentUser)
+    public TaskRepository(AppDbContext ctx, ICurrentUserService currentUser) : base(ctx, currentUser)
     {
     }
 }

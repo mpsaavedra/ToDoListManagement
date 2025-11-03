@@ -18,14 +18,14 @@ namespace Bootler.Infrastructure;
 
 public class AppDbContext : IdentityDbContext<AppUser, AppRole, long>
 {
-    //private readonly IDomainEventDispatcher _dispatcher;
-    //private readonly ICurrentUserService _currentUser;
+    private readonly IDomainEventDispatcher _dispatcher;
+    private readonly ICurrentUserService _currentUser;
 
-    public AppDbContext(DbContextOptions<AppDbContext> options/*, IDomainEventDispatcher dispatcher*/
-        /*, ICurrentUserService currentUser*/) : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options, IDomainEventDispatcher dispatcher
+        , ICurrentUserService currentUser) : base(options)
     {
-        //_dispatcher = dispatcher;
-        //_currentUser = currentUser;
+        _dispatcher = dispatcher;
+        _currentUser = currentUser;
     }
 
     public AppDbContext() : base() { }
@@ -34,13 +34,11 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, long>
     //{
     //}
 
-    public DbSet<Role> Roles { get; set; }
     public DbSet<AppTask> Tasks { get; set; }
-    //public DbSet<AppUser> Users {  get; set; }
     public DbSet<UserTask> UserTasks { get; set; }
 
-    //public IDomainEventDispatcher Dispatcher => _dispatcher;
-    //public long? CurrentUserId => _currentUser.GetUserId();
+    public IDomainEventDispatcher Dispatcher => _dispatcher;
+    public long? CurrentUserId => _currentUser.GetUserId();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,14 +53,16 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, long>
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
     private readonly IDomainEventDispatcher _dispatcher;
+    private readonly ICurrentUserService _currentUser;
 
     public DesignTimeDbContextFactory()
     {
     }
 
-    public DesignTimeDbContextFactory(IDomainEventDispatcher dispatcher)
+    public DesignTimeDbContextFactory(IDomainEventDispatcher dispatcher, ICurrentUserService currentUser)
     {
         _dispatcher = dispatcher;
+        _currentUser = currentUser;
     }
 
     public AppDbContext CreateDbContext(string[] args)
@@ -73,7 +73,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
             opts =>
                 opts.MigrationsAssembly("Bootler.Api"));
 
-        //return new AppDbContext(optionsBuilder.Options, _dispatcher);
-        return new AppDbContext(optionsBuilder.Options);
+        return new AppDbContext(optionsBuilder.Options, _dispatcher, _currentUser);
+        //return new AppDbContext(optionsBuilder.Options);
     }
 }

@@ -16,7 +16,7 @@ public interface IUserRepository : IRepository<User>
 
 public class UserRepository : Repository<User>, IUserRepository
 {
-    public UserRepository(IDbContextFactory<AppDbContext> factory, ICurrentUserService currentUser) : base(factory, currentUser)
+    public UserRepository(AppDbContext ctx, ICurrentUserService currentUser) : base(ctx, currentUser)
     {
     }
 }

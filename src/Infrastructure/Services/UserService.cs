@@ -54,7 +54,9 @@ public class UserService : IUserService
             try
             {
                 var repo = _unitOfWork.Repository<User>();
-                var users = await repo!.FindAsync(predicate: x => x.UserName == request.UserName, include: x => x.Include(y => y.Role));
+                var users = await repo!.FindAsync(
+                    disableTracking: true,
+                    predicate: x => x.UserName == request.UserName, include: x => x.Include(y => y.Role));
                 if (users == null)
                     throw new Exception("");
 
@@ -81,8 +83,8 @@ public class UserService : IUserService
                     signingCredentials: creds);
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-                user.Token = tokenString;
-                await repo.UpdateAsync(user.Id, user, cancellationToken);
+                //user.Token = tokenString;
+                //await repo.UpdateAsync(user.Id, user, cancellationToken);
                 var userDto = _mapper.Map<UserDto>(user);
 
                 await _signInManager.SignInAsync(user, request.RememberMe);

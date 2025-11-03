@@ -18,6 +18,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Bootler.Contracts.DTOs.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bootler.Infrastructure.Handlers.Queries.Tasks;
 
@@ -37,8 +38,11 @@ public class FindTasksQueryHandler : IRequestHandler<FindTasksQuery, BaseRespons
         try
         {
             var repo = _unitOfWork.Repository<AppTask>();
-            var data = await repo.GetAllAsync(cancellationToken);
-
+            var data = await repo.FindAsync(include:
+                i => i
+                    .Include(x => x.UserTasks)
+                    .ThenInclude(x => x.User),
+                cancellationToken: cancellationToken);
             // apply order by if exists
             if (!string.IsNullOrEmpty(request.Input.OrderBy) && !request.Input.OrderBy!.IsNullEmptyOrWhiteSpace())
                 data = data.OrderBy(request.Input.OrderBy!);

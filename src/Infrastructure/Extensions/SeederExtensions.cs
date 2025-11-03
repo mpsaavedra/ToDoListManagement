@@ -11,6 +11,7 @@ using AppRole = Bootler.Domain.Entities.Role;
 using AppUser = Bootler.Domain.Entities.User;
 using AppUserTask = Bootler.Domain.Entities.UserTask;
 using Bootler.Domain.Entities.States;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bootler.Infrastructure.Extensions;
 
@@ -27,8 +28,11 @@ public static class SeederExtensions
     public static async Task SeedDatabase(this IServiceProvider provider)
     {
         using var scope = provider.CreateAsyncScope();
-        var fact = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
-        var ctx = await fact.CreateDbContextAsync();
+        // var fact = scope.ServiceProvider.GetRequiredService<IDbContextFactory<AppDbContext>>();
+        // await using var ctx = await fact.CreateDbContextAsync();
+        await using var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var userMng = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+        var roleMng = scope.ServiceProvider.GetRequiredService<RoleManager<AppRole>>();
 
         #region Roles
 
@@ -41,11 +45,11 @@ public static class SeederExtensions
             {
                 Name = "admin",
             };
-            await ctx.Roles.AddAsync(roleAdmin);
+            //await ctx.Roles.AddAsync(roleAdmin);
+            await roleMng.CreateAsync(roleAdmin);
             await ctx.SaveChangesAsync();
         }
-        else
-            roleAdmin = await ctx.Roles.FirstAsync(r => r.Name == "admin");
+        roleAdmin = await ctx.Roles.FirstAsync(r => r.Name == "admin");
 
         if (ctx.Roles.All(r => r.Name != "user"))
         {
@@ -53,11 +57,11 @@ public static class SeederExtensions
             {
                 Name = "user",
             };
-            await ctx.Roles.AddAsync(roleUser);
+            //await ctx.Roles.AddAsync(roleUser);
+            await roleMng.CreateAsync(roleUser);
             await ctx.SaveChangesAsync();
         }
-        else
-            roleUser = await ctx.Roles.FirstAsync(r => r.Name == "user");
+        roleUser = await ctx.Roles.FirstAsync(r => r.Name == "user");
 
         #endregion
 
@@ -104,11 +108,11 @@ public static class SeederExtensions
                 Password = "admin123.*",
                 Role = roleAdmin,
             };
-            await ctx.Users.AddAsync(admin);
+            //await ctx.Users.AddAsync(admin);
+            await userMng.CreateAsync(admin);
             await ctx.SaveChangesAsync();
         }
-        else
-            admin = await ctx.Users.FirstAsync(u => u.UserName == "admin");
+        admin = await ctx.Users.FirstAsync(u => u.UserName == "admin");
 
         if (ctx.Users.All(u => u.UserName != "user1"))
         {
@@ -131,11 +135,11 @@ public static class SeederExtensions
             user1.Tasks.Add(new AppUserTask { Task = tasks[11] });
             user1.Tasks.Add(new AppUserTask { Task = tasks[12] });
 
-            await ctx.Users.AddAsync(user1);
+            //await ctx.Users.AddAsync(user1);
+            await userMng.CreateAsync(user1);
             await ctx.SaveChangesAsync();
         }
-        else
-            user1 = await ctx.Users.FirstAsync(u => u.UserName == "user1");
+        user1 = await ctx.Users.FirstAsync(u => u.UserName == "user1");
 
         if (ctx.Users.All(u => u.UserName != "user2"))
         {
@@ -157,11 +161,11 @@ public static class SeederExtensions
             user2.Tasks.Add(new AppUserTask { Task = tasks[13] });
             user2.Tasks.Add(new AppUserTask { Task = tasks[14] });
 
-            await ctx.Users.AddAsync(user2);
+            //await ctx.Users.AddAsync(user2);
+            await userMng.CreateAsync(user2);
             await ctx.SaveChangesAsync();
         }
-        else
-            user2 = await ctx.Users.FirstAsync(u => u.UserName == "user2");
+        user2 = await ctx.Users.FirstAsync(u => u.UserName == "user2");
 
         #endregion
     }
