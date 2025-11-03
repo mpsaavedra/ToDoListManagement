@@ -1,0 +1,1 @@
+2025-11-02 08:23:12.241 -05:00 [ERR] An error occurs while retrieving Users: Type 'Bootler.Contracts.DTOs.Users.UserTaskDto' does not have a default constructor (Parameter 'type')

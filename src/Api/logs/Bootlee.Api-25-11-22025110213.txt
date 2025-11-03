@@ -1,0 +1,12 @@
+2025-11-02 13:07:05.963 -05:00 [DBG] SignOut current user
+2025-11-02 13:07:18.894 -05:00 [DBG] Could not SignOut current user
+2025-11-02 13:07:24.480 -05:00 [DBG] Signing in user admin
+2025-11-02 13:07:25.023 -05:00 [DBG] User Signed In successfully
+2025-11-02 13:07:31.573 -05:00 [DBG] SignOut current user
+2025-11-02 13:07:45.301 -05:00 [DBG] Could not SignOut current user
+2025-11-02 13:16:21.830 -05:00 [DBG] Signing in user admin
+2025-11-02 13:16:42.200 -05:00 [DBG] User Signed In successfully
+2025-11-02 13:16:53.558 -05:00 [DBG] SignOut current user
+2025-11-02 13:17:35.519 -05:00 [DBG] Signing in user admin
+2025-11-02 13:17:57.576 -05:00 [DBG] User Signed In successfully
+2025-11-02 13:18:03.006 -05:00 [DBG] SignOut current user

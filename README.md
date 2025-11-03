@@ -1,5 +1,21 @@
-# ToDo List Management
+# Todo Manager API
 
-![Bootler todo list manager](./docs/brand-500x170.png)
+Este proyecto contiene una API para gestionar tareas (To-Do) junto con una interfaz de usuario (WUI) y una base de datos PostgreSQL, todo orquestado con Docker.
 
-ToDO list management system a.k.a **Bootler** the simpliest ToDo management system ever. Created as a response to an exam for a job application.
+## Requisitos
+
+- Docker
+- Docker Compose
+
+## ¿Cómo ejecutar la aplicación?
+
+1.  Abre una terminal en la raíz del proyecto.
+2.  Ejecuta el siguiente comando para construir las imágenes y levantar los contenedores en segundo plano:
+
+    ```bash
+    docker-compose up -d
+    ```
+
+Una vez que los contenedores estén en ejecución:
+- La interfaz de usuario (WUI) estará disponible en `http://localhost:8080`.
+- La API será accesible a través de la WUI en la ruta `/api`.

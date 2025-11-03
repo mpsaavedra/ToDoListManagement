@@ -1,0 +1,70 @@
+<div class="task-list-container">
+  <mat-toolbar color="primary" class="toolbar">
+    <span>Mis Tareas</span>
+    <span class="spacer"></span>
+    <button mat-icon-button (click)="authService.logout()" matTooltip="Cerrar Sesión">
+      <mat-icon>exit_to_app</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="table-container">
+    <div class="actions-header">
+        <button mat-raised-button color="primary" (click)="openTaskDialog()">
+            <mat-icon>add</mat-icon>
+            Nueva Tarea
+        </button>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+      <!-- Title Column -->
+      <ng-container matColumnDef="title">
+        <th mat-header-cell *matHeaderCellDef> Título </th>
+        <td mat-cell *matCellDef="let task"> {{task.title}} </td>
+      </ng-container>
+
+      <!-- Description Column -->
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef> Descripción </th>
+        <td mat-cell *matCellDef="let task"> {{task.description | slice:0:50}}... </td>
+      </ng-container>
+
+      <!-- DueDate Column -->
+      <ng-container matColumnDef="dueDate">
+        <th mat-header-cell *matHeaderCellDef> Fecha Límite </th>
+        <td mat-cell *matCellDef="let task"> {{task.dueDate | date:'dd/MM/yyyy'}} </td>
+      </ng-container>
+
+      <!-- State Column -->
+      <ng-container matColumnDef="state">
+        <th mat-header-cell *matHeaderCellDef> Estado </th>
+        <td mat-cell *matCellDef="let task">
+          <span class="status-chip" [ngClass]="'status-' + task.stateType?.toLowerCase()">{{task.stateType}}</span>
+        </td>
+      </ng-container>
+
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Acciones </th>
+        <td mat-cell *matCellDef="let task">
+          <button mat-icon-button color="primary" (click)="openTaskDialog(task)" matTooltip="Editar Tarea">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteTask(task.id)" matTooltip="Eliminar Tarea">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 20]"
+                   [pageSize]="10"
+                   [length]="totalTasks"
+                   (page)="onPageChange($event)"
+                   showFirstLastButtons>
+    </mat-paginator>
+  </div>
+</div>

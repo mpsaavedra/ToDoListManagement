@@ -1,0 +1,9 @@
+2025-11-02 11:25:56.018 -05:00 [DBG] Task 17 updated successfully
+2025-11-02 11:28:23.713 -05:00 [DBG] Task 17 updated successfully
+2025-11-02 11:29:05.916 -05:00 [DBG] Deleting Task with ID: 17
+2025-11-02 11:29:10.657 -05:00 [DBG] Task deleted successfully
+2025-11-02 11:30:12.442 -05:00 [ERR] An error occurs while retrieving Users: Type 'Bootler.Contracts.DTOs.Users.UserTaskDto' does not have a default constructor (Parameter 'type')
+2025-11-02 11:30:27.795 -05:00 [ERR] An error occurs while retrieving Users: Type 'Bootler.Contracts.DTOs.Users.UserTaskDto' does not have a default constructor (Parameter 'type')
+2025-11-02 11:43:15.909 -05:00 [ERR] An error occurs while retrieving Users: Type 'Bootler.Contracts.DTOs.Users.UserTaskDto' does not have a default constructor (Parameter 'type')
+2025-11-02 11:55:04.484 -05:00 [ERR] An error occurs while Searching for Users
+2025-11-02 11:58:55.327 -05:00 [DBG] Assigning Task 2 to User 1

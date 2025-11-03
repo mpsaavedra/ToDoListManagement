@@ -1,0 +1,19 @@
+2025-11-02 07:39:45.062 -05:00 [ERR] An error occurs while retrieving Users
+2025-11-02 07:43:13.724 -05:00 [ERR] An error occurs while retrieving Users
+2025-11-02 07:49:52.801 -05:00 [ERR] An error occurs while retrieving Users
+2025-11-02 07:50:34.988 -05:00 [ERR] An error occurs while retrieving Users
+2025-11-02 07:51:15.022 -05:00 [ERR] An error occurs while retrieving Users
+2025-11-02 07:51:53.316 -05:00 [ERR] An error occurs while retrieving Users
+2025-11-02 07:55:24.396 -05:00 [ERR] An error occurs while retrieving Users: Unable to create a map expression from UserTask.AssignedBy (System.Nullable`1[System.Int64]) to UserDto.AssignedBy (Bootler.Contracts.DTOs.Users.UserDto)
+
+Mapping types:
+UserTask -> UserTaskDto
+Bootler.Domain.Entities.UserTask -> Bootler.Contracts.DTOs.Users.UserTaskDto
+
+Type Map configuration:
+UserTask -> UserTaskDto
+Bootler.Domain.Entities.UserTask -> Bootler.Contracts.DTOs.Users.UserTaskDto
+
+Destination Member:
+Void .ctor(Bootler.Contracts.DTOs.Users.UserDto, Bootler.Contracts.DTOs.Tasks.TaskDto, Bootler.Contracts.DTOs.Users.UserDto), parameter AssignedBy
+
