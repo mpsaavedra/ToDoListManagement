@@ -1,2 +1,13 @@
 2025-11-03 09:05:52.547 -05:00 [DBG] Signing in user admin
 2025-11-03 09:06:06.451 -05:00 [ERR] Error while signing in user admin
+2025-11-03 09:39:13.992 -05:00 [DBG] Signing in user admin
+2025-11-03 09:40:41.169 -05:00 [DBG] User Signed In successfully
+2025-11-03 09:41:40.025 -05:00 [DBG] Signing in user admin
+2025-11-03 09:43:03.414 -05:00 [DBG] Signing in user admin
+2025-11-03 09:43:06.159 -05:00 [DBG] User Signed In successfully
+2025-11-03 09:43:11.067 -05:00 [DBG] Signing in user admin
+2025-11-03 09:43:11.134 -05:00 [DBG] User Signed In successfully
+2025-11-03 09:43:32.908 -05:00 [DBG] Signing in user admin
+2025-11-03 09:43:33.048 -05:00 [DBG] User Signed In successfully
+2025-11-03 09:44:07.920 -05:00 [DBG] Signing in user admin
+2025-11-03 09:44:07.973 -05:00 [DBG] User Signed In successfully

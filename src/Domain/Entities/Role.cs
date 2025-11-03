@@ -11,7 +11,6 @@ namespace Bootler.Domain.Entities;
 
 public class Role : IdentityRole<long>,  IEntity
 {
-    private string _name;
     private ICollection<User> _users = new List<User>();
 
     public Role()
@@ -23,11 +22,6 @@ public class Role : IdentityRole<long>,  IEntity
         users ??= new List<User>();
         Name = name;
         Users = users;
-    }
-    public string Name 
-    { 
-        get => _name; 
-        set => _name = value; 
     }
     public ICollection<User> Users 
     { 

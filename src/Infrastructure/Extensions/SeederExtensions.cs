@@ -36,32 +36,34 @@ public static class SeederExtensions
 
         #region Roles
 
-        AppRole roleAdmin;
-        AppRole roleUser;
+        var roleUser = await roleMng.FindByNameAsync("User");
+        var roleAdmin = await roleMng.FindByNameAsync("Admin");
 
-        if (ctx.Roles.All(r => r.Name != "admin"))
+        if (roleAdmin == null)
         {
             roleAdmin = new AppRole
             {
-                Name = "admin",
+                Name = "Admin"
             };
-            //await ctx.Roles.AddAsync(roleAdmin);
-            await roleMng.CreateAsync(roleAdmin);
-            await ctx.SaveChangesAsync();
-        }
-        roleAdmin = await ctx.Roles.FirstAsync(r => r.Name == "admin");
 
-        if (ctx.Roles.All(r => r.Name != "user"))
+            var result = await roleMng.CreateAsync(roleAdmin);
+
+            if (!result.Succeeded) 
+                throw new InvalidOperationException("Error creating 'admin' role.");
+        }
+
+        if (roleUser == null)
         {
             roleUser = new AppRole
             {
-                Name = "user",
+                Name = "User"
             };
-            //await ctx.Roles.AddAsync(roleUser);
-            await roleMng.CreateAsync(roleUser);
-            await ctx.SaveChangesAsync();
+
+            var result = await roleMng.CreateAsync(roleUser);
+
+            if (!result.Succeeded)
+                throw new InvalidOperationException("Error creatin 'user' role.");
         }
-        roleUser = await ctx.Roles.FirstAsync(r => r.Name == "user");
 
         #endregion
 
