@@ -3,19 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "Bootler.WUI": {
+    "todo-manager": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "standalone": false
-        },
-        "@schematics/angular:directive": {
-          "standalone": false
-        },
-        "@schematics/angular:pipe": {
-          "standalone": false
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -66,16 +56,13 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "Bootler.WUI:build:production"
+              "buildTarget": "todo-manager:build:production"
             },
             "development": {
-              "buildTarget": "Bootler.WUI:build:development"
+              "buildTarget": "todo-manager:build:development"
             }
           },
-          "defaultConfiguration": "development",
-          "options": {
-            "port": 62531
-          }
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular/build:extract-i18n"
@@ -96,8 +83,7 @@
             ],
             "styles": [
               "src/styles.css"
-            ],
-            "karmaConfig": "karma.conf.js"
+            ]
           }
         }
       }

@@ -1,0 +1,51 @@
+.task-list-container {
+  padding: 20px;
+  background-color: #f0f4f8; // Un azul azure muy claro
+  min-height: calc(100vh - 40px);
+}
+
+.toolbar {
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.table-container {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.actions-header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+table {
+  width: 100%;
+}
+
+.status-chip {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+}
+
+.status-pending {
+  background-color: #ffc107; // Amber
+}
+
+.status-confirmed {
+  background-color: #2196f3; // Blue
+}
+
+.status-finished {
+  background-color: #4caf50; // Green
+}
