@@ -1,0 +1,2 @@
+2025-11-01 15:16:39.888 -04:00 [ERR] An error occurs while retrieving Tasks
+2025-11-01 15:28:34.036 -04:00 [ERR] An error occurs while retrieving Tasks

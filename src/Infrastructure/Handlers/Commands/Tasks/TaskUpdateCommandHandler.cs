@@ -2,6 +2,7 @@
 using Bootler.Contracts.Responses;
 using Bootler.Infrastructure.Commands.Tasks;
 using Bootler.Infrastructure.Common;
+using Bootler.Infrastructure.Extensions;
 using MediatR;
 using Serilog;
 using System;
@@ -37,10 +38,11 @@ public class TaskUpdateCommandHandler : IRequestHandler<TaskUpdateCommand, BaseR
                     return BaseResponse.Failed("Task not found.");
                 }
 
-                task.Title = request.Input.Title!;
-                task.Description = request.Input.Description!;
-                task.DueDate = request.Input.DueDate;
-                task.StateType = request.Input.StateType!;
+                //task.Title = request.Input.Title!;
+                //task.Description = request.Input.Description!;
+                //task.DueDate = request.Input.DueDate;
+                //task.StateType = request.Input.StateType!;
+                task.PopulateWithMappedData(data);
                 await taskRepo.UpdateAsync(task.Id, task);
 
                 Log.Debug($"Task {request.Input.Id} updated successfully");

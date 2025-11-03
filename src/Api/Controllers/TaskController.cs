@@ -11,6 +11,8 @@ using System.Net.Mime;
 
 namespace Bootler.Api.Controllers;
 
+[ApiController]
+[Route("api/[controller]")]
 public class TaskController : ApiControllerBase
 {
     private readonly IMediator _mediator;

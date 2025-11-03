@@ -49,7 +49,7 @@ public class UserController : ApiControllerBase
         return ToWithStatusCode(result,
             result.Success 
                 ? "User signout success!"
-                : "Couldn't sign in user",
+                : "Couldn't sign out user",
             result.Success 
                 ?  HttpStatusCode.OK
                 : HttpStatusCode.InternalServerError
@@ -65,8 +65,8 @@ public class UserController : ApiControllerBase
         var result = await _mediator.Send(new SignUpCommand(request));
         return ToWithStatusCode(result,
             result.Success && result.Data.Id > 0
-                ? $"User  {request.UserName} sign in success!"
-                : $"Couldn't sign user {request.UserName}",
+                ? $"User  {request.UserName} sign up success!"
+                : $"Couldn't sign up user {request.UserName}",
             !result.Success
                 ? HttpStatusCode.OK
                 : HttpStatusCode.InternalServerError);

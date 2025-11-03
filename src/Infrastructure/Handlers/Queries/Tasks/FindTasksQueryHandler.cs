@@ -40,22 +40,21 @@ public class FindTasksQueryHandler : IRequestHandler<FindTasksQuery, BaseRespons
             var data = await repo.GetAllAsync(cancellationToken);
 
             // apply order by if exists
-            if (!request.Input.OrderBy!.IsNullEmptyOrWhiteSpace())
+            if (!string.IsNullOrEmpty(request.Input.OrderBy) && !request.Input.OrderBy!.IsNullEmptyOrWhiteSpace())
                 data = data.OrderBy(request.Input.OrderBy!);
 
             // apply filters if exists
-            if (request.Input.Filters.Any())
+            if (request.Input.Filters != null && request.Input.Filters.Any())
             {
                 foreach (var filter in request.Input.Filters)
                 {
                     data = data.Where(filter);
                 }
             }
-
+            var d = true;
             // apply pagination
-            var paginated = await data
-                    .ProjectTo<TaskDto>(_mapper.ConfigurationProvider)
-                    .PaginatedListAsync(request.Input.PageIndex, request.Input.PageSize);
+            var projectTo = data.ProjectTo<TaskDetailDto>(_mapper.ConfigurationProvider);
+            var paginated = await projectTo.PaginatedListAsync(request.Input.PageIndex, request.Input.PageSize);
 
             return new BaseResponse<FindTasksResponse>
             {
@@ -65,7 +64,7 @@ public class FindTasksQueryHandler : IRequestHandler<FindTasksQuery, BaseRespons
         catch (Exception ex)
         {
             Log.Error("An error occurs while retrieving Tasks", ex);
-            return (BaseResponse<FindTasksResponse>)BaseResponse.Failed("An error occurs while retrieving Taks");
+            return BaseResponse.Fail<BaseResponse<FindTasksResponse>>(ex);
         }
     }
 }

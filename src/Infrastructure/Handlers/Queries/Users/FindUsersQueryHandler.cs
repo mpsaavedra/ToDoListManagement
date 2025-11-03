@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Bootler.Contracts.DTOs.Users;
 using Bootler.Contracts.Responses;
+using Bootler.Contracts.Responses.Tasks;
 using Bootler.Contracts.Responses.Users;
 using Bootler.Domain.Entities;
 using Bootler.Infrastructure.Common;
@@ -36,11 +37,11 @@ public class FindUsersQueryHandler : IRequestHandler<FindUsersQuery, BaseRespons
             var data = await repo.GetAllAsync(cancellationToken);
             
             // apply order by if exists
-            if (!request.Input.OrderBy!.IsNullEmptyOrWhiteSpace())
+            if (request.Input.OrderBy != null && !request.Input.OrderBy!.IsNullEmptyOrWhiteSpace())
                 data = data.OrderBy(request.Input.OrderBy!);
-            
+
             // apply filters if exists
-            if(request.Input.Filters.Any())
+            if (request.Input.Filters != null && request.Input.Filters.Any())
             {
                 foreach (var filter in request.Input.Filters)
                 {
@@ -50,7 +51,7 @@ public class FindUsersQueryHandler : IRequestHandler<FindUsersQuery, BaseRespons
 
             // apply pagination
             var paginated = await data
-                    .ProjectTo<UserDto>(_mapper.ConfigurationProvider)
+                    .ProjectTo<UserDetailDto>(_mapper.ConfigurationProvider)
                     .PaginatedListAsync(request.Input.PageIndex, request.Input.PageSize);
 
             return new BaseResponse<FindUsersResponse>
@@ -61,7 +62,7 @@ public class FindUsersQueryHandler : IRequestHandler<FindUsersQuery, BaseRespons
         catch (Exception ex) 
         {
             Log.Error("An error occurs while Searching for Users", ex);
-            return (BaseResponse<FindUsersResponse>)BaseResponse.Failed("An error occurs while searching for Users");
+            return BaseResponse.Fail<BaseResponse<FindUsersResponse>>(ex);
         }
     }
 }

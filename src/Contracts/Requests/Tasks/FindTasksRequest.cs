@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Requests.Tasks;
 
-public record FindTasksRequest(IEnumerable<string> Filters, string? OrderBy = null, int PageIndex = 0, int PageSize = 50);
+public record FindTasksRequest(string[] Filters, string? OrderBy = null, int PageIndex = 1, int PageSize = 50);

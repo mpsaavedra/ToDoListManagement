@@ -7,4 +7,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Responses.Users;
 
-public record FindUsersResponse(PaginatedList<UserDto> Users);
+public record FindUsersResponse(PaginatedList<UserDetailDto> Users);

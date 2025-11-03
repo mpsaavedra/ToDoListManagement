@@ -7,4 +7,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Responses.Tasks;
 
-public record FindTasksResponse(PaginatedList<TaskDto> Tasks);
+public record FindTasksResponse(PaginatedList<TaskDetailDto> Tasks);

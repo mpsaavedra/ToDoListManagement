@@ -8,4 +8,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Requests.Users;
 
-public record SignInRequest(string UserName, string Password);
+public record SignInRequest(string UserName, string Password, bool RememberMe = true);

@@ -15,7 +15,7 @@ namespace Bootler.Infrastructure.Extensions;
 public static class DbContextExtensions
 {
     public static async Task<int> SaveEntitiesChangesAsync(this AppDbContext context,
-        int userId = 0, CancellationToken cancellationToken = default)
+        long userId = 0, CancellationToken cancellationToken = default)
     { 
         cancellationToken.ThrowIfCancellationRequested();
         var entries = context.ChangeTracker.Entries().Where(x => x.Entity is Entity);
@@ -36,8 +36,8 @@ public static class DbContextExtensions
         var domainEvents = domainEntities
                                 .SelectMany(x => x.DomainEvents)
                                 .ToList();
-        if (context.Dispatcher != null && domainEvents.Any())
-            await context.Dispatcher?.DispatchEventAsync(domainEvents)!;
+        // if (context.Dispatcher != null && domainEvents.Any())
+        //     await context.Dispatcher?.DispatchEventAsync(domainEvents)!;
 
         domainEntities.ToList().ForEach(entity => ((Entity)entity).ClearEvents());
 

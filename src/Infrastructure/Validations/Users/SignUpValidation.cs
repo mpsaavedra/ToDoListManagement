@@ -13,10 +13,10 @@ public class SignUpValidation : AbstractValidator<SignUpRequest>
     public SignUpValidation()
     {
         RuleFor(x => x.UserName)
-                    .Must(x => !string.IsNullOrWhiteSpace(x) || !string.IsNullOrEmpty(x))
-                    .WithMessage("UserName could not be null, empty or whitespace")
-                    .Must(x => x.Length < 150)
-                    .WithMessage("Username could not have more then 150 characters");
+            .Must(x => !string.IsNullOrWhiteSpace(x) || !string.IsNullOrEmpty(x))
+            .WithMessage("UserName could not be null, empty or whitespace")
+            .Must(x => x.Length < 150)
+            .WithMessage("Username could not have more then 150 characters");
         RuleFor(x => x.Password)
             .Must(x => !string.IsNullOrWhiteSpace(x) || !string.IsNullOrEmpty(x))
             .WithMessage("Password could not be null, empty or whitespace");

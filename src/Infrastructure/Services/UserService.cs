@@ -18,6 +18,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace Bootler.Infrastructure.Services;
 
@@ -26,12 +27,17 @@ public class UserService : IUserService
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
     private readonly IConfiguration _config;
+    private readonly ICurrentUserService _currentUser;
+    private readonly SignInManager<User> _signInManager;
 
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration config)
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper, IConfiguration config,
+        ICurrentUserService currentUser, SignInManager<User> signInManager)
     {
-        this._unitOfWork = unitOfWork;
-        this._mapper = mapper;
-        this._config = config;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+        _config = config;
+        _currentUser = currentUser;
+        _signInManager = signInManager;
     }
 
     public async Task<bool> IsAdminAsync(string userName, CancellationToken cancellationToken = default)
@@ -48,7 +54,7 @@ public class UserService : IUserService
             try
             {
                 var repo = _unitOfWork.Repository<User>();
-                var users = await repo!.FindAsync(predicate: x => x.UserName == request.UserName);
+                var users = await repo!.FindAsync(predicate: x => x.UserName == request.UserName, include: x => x.Include(y => y.Role));
                 if (users == null)
                     throw new Exception("");
 
@@ -65,7 +71,7 @@ public class UserService : IUserService
 
                 var authClaims = new List<Claim>
                     {
-                        new (ClaimTypes.Role, role),
+                        //new (ClaimTypes.Role, role),
                         new (ClaimTypes.Name, request.UserName!),
                     };
                 
@@ -79,6 +85,8 @@ public class UserService : IUserService
                 await repo.UpdateAsync(user.Id, user, cancellationToken);
                 var userDto = _mapper.Map<UserDto>(user);
 
+                await _signInManager.SignInAsync(user, request.RememberMe);
+
                 return new SignInResponse(tokenString, userDto);
             }
             catch (Exception ex)
@@ -87,10 +95,28 @@ public class UserService : IUserService
             }
         });
 
-    public async Task<bool> SignOutAsync(CancellationToken cancellationToken = default)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<bool> SignOutAsync(CancellationToken cancellationToken = default) =>
+        _unitOfWork.ExecuteAsync(async () =>
+        {
+            try
+            {
+                var repo = _unitOfWork.Repository<User>();
+                var userId = _currentUser.GetUserId();
+                if (userId == null) return true;
+
+                var user = await repo.FirstOrDefaultAsync(x => x.Id == userId.Value);
+                if(user == null) return true;
+                user.Token = null;
+
+                var updated = await repo.UpdateAsync(user.Id, user);
+                await _signInManager.SignOutAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        });
 
     public Task<SignUpResponse> SignUpAsync(SignUpRequest request, CancellationToken cancellationToken = default) =>
         _unitOfWork.ExecuteAsync(async () =>
@@ -99,18 +125,27 @@ public class UserService : IUserService
             try
             {
                 var repo = _unitOfWork.Repository<User>();
+                var roleRepo = _unitOfWork.Repository<Role>();
                 Log.Debug("Maping user request objetc to app user");
-                var data = _mapper.Map<User>(request);
-                var users = await repo!.FindAsync(predicate: x => x.UserName == data.UserName);
+                var users = await repo!.FindAsync(predicate: x => x.UserName == request.UserName);
                 if (users == null)
-                    throw new Exception($"User {data.UserName} already exists");
+                    throw new Exception($"User {request.UserName} already exists");
 
-                var id = await repo!.CreateAsync(data, cancellationToken);
+                var role = await roleRepo.FirstOrDefaultAsync(x => x.Name == request.Role);
+                if (role == null)
+                    throw new Exception();
 
-                return new SignUpResponse(data.Id, data.UserName);
+                var user = new User(request.UserName, request.Password, role);
+                var id = await repo!.CreateAsync(user, cancellationToken);
+
+                if (!id.HasValue)
+                    throw new Exception($"An error has occurs Signing Up user {request.UserName}");
+
+                return new SignUpResponse(id.Value, user.UserName);
             }
             catch (Exception ex)
             {
+                Log.Error(ex.Message);
                 throw;
             }
         });

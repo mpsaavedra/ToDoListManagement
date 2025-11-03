@@ -22,11 +22,11 @@ public class UserTask : Entity
     public UserTask()
     {
     }
-    public UserTask(long userId, long taskId, long? assignedBy = null)
+    public UserTask(long userId, long taskId, long? assignedById = null)
     {
         UserId = userId;
         TaskId = taskId;
-        AssignedBy = assignedBy;
+        _assignedById = assignedById;
     }
 
     public long UserId 
@@ -43,13 +43,12 @@ public class UserTask : Entity
         get => _taskId;
         set => _taskId = value; 
     }
-    public long? AssignedBy { get; }
     public Task Task 
     { 
         get => _task;
-        set => _task = value; 
+        set => _task = value;
     }
-    public long? AsignedById
+    public long? AssignedById
     {
         get => _assignedById;
         set => _assignedById = value;

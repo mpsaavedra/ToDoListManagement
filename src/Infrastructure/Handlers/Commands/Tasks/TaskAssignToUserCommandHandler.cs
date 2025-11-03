@@ -45,8 +45,27 @@ public class TaskAssignToUserCommandHandler : IRequestHandler<TaskAssignToUserCo
                     Log.Error("User {UserId} not found", request.Input.UserId);
                     return BaseResponse.Failed("User not found.");
                 }
+                User? assignBy = null;
+                if (request.Input.AdminId > 0)
+                {
+                    assignBy = await userRepo!.FirstOrDefaultAsync(x => x.Id == request.Input.AdminId);
+                    if (assignBy is null)
+                    {
+                        Log.Error("Admin User {UserId} not found", request.Input.UserId);
+                        return BaseResponse.Failed("Admin User not found.");
+                    }
+                }
                 if (!user.Tasks.Any(x => x.UserId == request.Input.UserId && x.TaskId == request.Input.TaskId))
                 {
+                    var userTask = new UserTask
+                    {
+                        User = user,
+                        Task = task,
+                    };
+                    if (request.Input.AdminId > 0)
+                        userTask.AsignedBy = assignBy;
+
+                    user.Tasks.Add(userTask);
                     await taskRepo!.UpdateAsync(task.Id, task);
                     Log.Debug("Task {TaskId} assigned to User {UserId}", request.Input.TaskId, request.Input.UserId);
                 }

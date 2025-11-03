@@ -33,6 +33,10 @@ public class UnitOfWork : IUnitOfWork
 
     private async Task<long> CreateAdminUser(AppDbContext ctx)
     {
+        if(ctx.Users.Any(x => x.UserName == "admin"))
+        {
+            return ctx.Users.First(x => x.UserName == "admin").Id;
+        }
         var admin = new AppUser
         {
             UserName = "admin",

@@ -6,4 +6,4 @@ using System.Threading.Tasks;
 
 namespace Bootler.Contracts.Requests.Tasks;
 
-public record GetAllTasksRequest(int PageIndex = 0, int PageSize = 50, bool SoftDeleted = false);
+public record GetAllTasksRequest(int PageIndex = 1, int PageSize = 50, bool SoftDeleted = false);

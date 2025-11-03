@@ -52,8 +52,8 @@ public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, BaseRes
         }
         catch (Exception ex)
         {
-            Log.Error("An error occurs while retrieving Users", ex);
-            return (BaseResponse<GetAllUsersResponse>)BaseResponse.Failed("An error occurs while retrieving Users");
+            Log.Error($"An error occurs while retrieving Users: {ex.Message}", ex);
+            return BaseResponse.Fail<BaseResponse<GetAllUsersResponse>>($"An error occurs while retrieving Users: {ex.Message}");
         }
     }
 }

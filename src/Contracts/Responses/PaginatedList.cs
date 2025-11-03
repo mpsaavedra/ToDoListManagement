@@ -35,7 +35,7 @@ public class PaginatedList<TEntity>
             PageIndex = pageIndex - 1;
             PageSize = pageSize;
             TotalCount = queryable.Count();
-            TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize) - 1;
+            TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
             //var skip = queryable.Skip(PageIndex * PageSize);
             //var take = skip.Take(PageSize).ToList();
             Items = queryable.Skip(PageIndex * PageSize).Take(PageSize).ToList();

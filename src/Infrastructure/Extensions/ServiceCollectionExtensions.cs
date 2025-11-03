@@ -1,4 +1,5 @@
-﻿using Bootler.Events;
+﻿using Bootler.Domain.Entities;
+using Bootler.Events;
 using Bootler.Infrastructure.Behaviours;
 using Bootler.Infrastructure.Common;
 using Bootler.Infrastructure.Repositories;
@@ -8,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -67,6 +69,22 @@ public static class ServiceCollectionExtensions
                             null);
                     })
             );
+        
+        services.AddDbContext<AppDbContext>((serviceProvider, options) =>
+        {
+            options.EnableDetailedErrors(true)
+                .EnableSensitiveDataLogging(true)
+                .UseNpgsql(configuration.GetConnectionString("DefaultConnectionString"),
+                    cfg =>
+                    {
+                        cfg.MigrationsAssembly("Bootler.Api");
+                        cfg.EnableRetryOnFailure(
+                            10,
+                            TimeSpan.FromSeconds(3, 10, 0),
+                            null);
+                    });
+        });
+        
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ITaskRepository, TaskRepository>();
         services.AddScoped<IUserRepository, UserRepository>();
@@ -91,6 +109,11 @@ public static class ServiceCollectionExtensions
         var jwtKey = configuration["Jwt:Key"] ?? "800249BD-D2D8-4F43-8818-BF0B5334E2CB";
         var jwtIssuer = configuration["Jwt:Issuer"] ?? "BootlerApi";
         var key = Encoding.ASCII.GetBytes(jwtKey);
+
+        services.AddIdentity<User, Role>()
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
         services
             .AddAuthorization(opts =>
             {
@@ -124,7 +147,7 @@ public static class ServiceCollectionExtensions
                     OnChallenge = context =>
                     {
                         context.HandleResponse();
-                        return Task.CompletedTask;
+                        return System.Threading.Tasks.Task.CompletedTask;
                     },
                     OnAuthenticationFailed = context =>
                     {
@@ -144,7 +167,7 @@ public static class ServiceCollectionExtensions
                         }
 
                         context.Response.WriteAsync(text);
-                        return Task.CompletedTask;
+                        return System.Threading.Tasks.Task.CompletedTask;
                     }
                 };
             });

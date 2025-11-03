@@ -25,6 +25,7 @@ public class CurrentUserService : ICurrentUserService
     {
         if(_userClaim != null && long.TryParse(_userClaim.Value, out var userId)) 
             return userId;
+        var first = _httpContextAccessor.HttpContext?.User.FindFirst("UserId");
         return null;
     }
 }
